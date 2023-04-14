@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="csrf-token" content="{{ csrf_token() }}">
-  
+
   <title>@yield('title', 'Contact App')</title>
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Varela+Round">
@@ -20,7 +20,7 @@
   <!-- navbar -->
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
-      <a class="navbar-brand text-uppercase" href="index.html">
+      <a class="navbar-brand text-uppercase" href="{{route('contacts.index')}}">
         <strong>Contact</strong> App
       </a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-toggler"
@@ -30,23 +30,35 @@
 
       <!-- /.navbar-header -->
       <div class="collapse navbar-collapse" id="navbar-toggler">
+        @auth
         <ul class="navbar-nav">
           <li class="nav-item"><a href="#" class="nav-link">Companies</a></li>
           <li class="nav-item active"><a href="#" class="nav-link">Contacts</a></li>
         </ul>
+        @endauth
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item mr-2"><a href="#" class="btn btn-outline-secondary">Login</a></li>
-          <li class="nav-item"><a href="#" class="btn btn-outline-primary">Register</a></li>
+          @guest
+          <li class="nav-item mr-2"><a href="{{route('login')}}" class="btn btn-outline-secondary">Login</a></li>
+          <li class="nav-item"><a href="{{route('register')}}" class="btn btn-outline-primary">Register</a></li>
+          @else
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-              John Doe
+              @if (isset($user))
+                  {{$user->name}}
+              @endif
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="profile.html">Settings</a>
-              <a class="dropdown-item" href="#">Logout</a>
+              <a class="dropdown-item" href="{{route('profile.edit')}}">profile</a>
+              <form action="{{route('logout')}}" method="POST">
+                @csrf
+                <a class="dropdown-item" href="{{route('logout')}}" 
+                    onclick="event.preventDefault();
+                    this.closest('form').submit();">Logout</a>
+              </form>
             </div>
           </li>
+          @endguest
         </ul>
       </div>
     </div>

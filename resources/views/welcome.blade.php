@@ -16,8 +16,6 @@
         </style>
     </head>
     <body class="antialiased">
-        <a href={{route('hello-world.index')}}>Hello world</a>
-        <a href={{ route('contacts.show', 1) }}>Show</a>
-        <a href={{route('contacts.create')}}>Add</a>
+        <a href={{route('contacts.index')}}>Show contacts</a>
     </body>
 </html>

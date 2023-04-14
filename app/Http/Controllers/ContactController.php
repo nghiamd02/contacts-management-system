@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Models\Company;
+use Illuminate\Support\Facades\Auth;
 
 class ContactController extends Controller
 {
@@ -21,12 +22,18 @@ class ContactController extends Controller
         $contacts = Contact::latestFirst()->paginate(10);   
         $contacts->appends(['company_id' => request('company_id')]);
         $companies = Company::orderBy('name')->pluck('name', 'id')->prepend("All companies", "");
-        return view('contacts.index', compact('contacts', 'companies'));
+        if(Auth::check()){
+            $user = Auth::user();
+            return view('contacts.index', compact('contacts', 'companies', 'user'));
+        }else{        
+            return view('contacts.index', compact('contacts', 'companies'));
+        }
     }
 
     public function create(){
         $companies = Company::orderBy('name')->pluck('name', 'id')->prepend("All companies", "");
-        return view('contacts.create', compact('companies'));
+        $contact = null;
+        return view('contacts.create', compact('companies', 'contact'));
     }
 
     public function store(Request $request){

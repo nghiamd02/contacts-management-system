@@ -14,7 +14,7 @@
             <div class="card-body">
               <form action="{{route('contacts.store')}}", method="POST">
                 @csrf
-                @include('contacts._form')
+                @include('contacts._adding_form')
               </form>
             </div>
           </div>
